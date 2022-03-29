@@ -5,4 +5,6 @@ module com.example.gui {
 
     opens com.example.gui to javafx.fxml;
     exports com.example.gui;
+    exports Client;
+    opens Client to javafx.fxml;
 }

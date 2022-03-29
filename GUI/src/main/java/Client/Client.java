@@ -1,4 +1,4 @@
-package com.example.gui;
+package Client;
 
 import java.io.*;
 import java.net.Socket;
@@ -15,6 +15,7 @@ public class Client {
         bufferedWriter.newLine();
         bufferedWriter.flush();
 
+        clientSocket = new Socket();
         clientSocket.close();;
         outputStreamWriter.close();
         bufferedWriter.close();

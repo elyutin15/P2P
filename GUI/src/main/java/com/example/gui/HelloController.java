@@ -1,18 +1,24 @@
 package com.example.gui;
 
+import Client.Client;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
 
 public class HelloController {
+    public HelloController() {
+    }
+    @FXML
+    public Button button;
     @FXML
     private Label welcomeText;
-    private Client client;
     @FXML
     protected void onHelloButtonClick() throws IOException {
         welcomeText.setText("Welcome to JavaFX Application!");
-        client = new Client();
+//        Client client = new Client();
 
     }
+
 }
