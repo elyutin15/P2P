@@ -1,5 +1,6 @@
 package com.example.gui;
 
+import Client.Client;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -52,6 +53,11 @@ public class Main extends Application {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                try {
+                    Client c = new Client();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

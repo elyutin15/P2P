@@ -8,15 +8,14 @@ public class Client {
     private OutputStreamWriter outputStreamWriter;
     private BufferedWriter bufferedWriter;
     public Client() throws IOException {
-        clientSocket = new Socket("26.246.20.243",10001);
+        clientSocket = new Socket("localhost",10001);
         outputStreamWriter= new OutputStreamWriter(clientSocket.getOutputStream());
         bufferedWriter = new BufferedWriter(outputStreamWriter);
         bufferedWriter.write("hello");
         bufferedWriter.newLine();
         bufferedWriter.flush();
 
-        clientSocket = new Socket();
-        clientSocket.close();;
+        clientSocket.close();
         outputStreamWriter.close();
         bufferedWriter.close();
     }
