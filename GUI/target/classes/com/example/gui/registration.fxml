@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.gui.RegistrationController"
-            prefHeight="300.0" prefWidth="400.0">
+
+<AnchorPane prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #262a30;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gui.RegistrationController">
+   <children>
+      <Text fill="#c6cdd9" layoutX="23.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Имя аккаунта" wrappingWidth="82.13671875">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Text>
+      <TextField layoutX="114.0" layoutY="76.0" prefHeight="25.0" prefWidth="264.0" style="-fx-background-color: #A0A0A0;" />
+      <Text fill="#c6cdd9" layoutX="59.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Пароль" wrappingWidth="45.4700927734375">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Text>
+      <TextField layoutX="114.0" layoutY="124.0" prefHeight="25.0" prefWidth="264.0" style="-fx-background-color: #A0A0A0;" />
+   </children>
 </AnchorPane>
