@@ -8,8 +8,6 @@ import javafx.scene.control.Label;
 import java.io.IOException;
 
 public class HelloController {
-    public HelloController() {
-    }
     @FXML
     public Button button;
     @FXML
@@ -17,8 +15,6 @@ public class HelloController {
     @FXML
     protected void onHelloButtonClick() throws IOException {
         welcomeText.setText("Welcome to JavaFX Application!");
-        Client client = new Client();
-
     }
 
 }

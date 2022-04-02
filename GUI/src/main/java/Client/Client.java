@@ -11,10 +11,15 @@ public class Client {
         clientSocket = new Socket("localhost",10001);
         outputStreamWriter= new OutputStreamWriter(clientSocket.getOutputStream());
         bufferedWriter = new BufferedWriter(outputStreamWriter);
-        bufferedWriter.write("hello");
+    }
+
+    public void sendMessage(String message) throws IOException {
+        bufferedWriter.write(message);
         bufferedWriter.newLine();
         bufferedWriter.flush();
+    }
 
+    public void close() throws IOException {
         clientSocket.close();
         outputStreamWriter.close();
         bufferedWriter.close();

@@ -94,6 +94,7 @@ public class Server {
         }
         return false;
     }
+<<<<<<< HEAD
 
     public void ClientSession(Socket client) {
         try {
@@ -117,6 +118,23 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+=======
+    public void ClientSession(Socket client) throws IOException {
+        InputStreamReader inputStreamReader = new InputStreamReader(client.getInputStream());
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        String clientMessage = bufferedReader.readLine();
+        if(clientMessage.startsWith("command := register")) {
+            String finalClientMessage = clientMessage.substring(20);
+            System.out.println(finalClientMessage);
+            RegisterClient("nicedick", "pudgeisfavor");
+            RegisterClient("nice62636132dick", "pudgeisfavo1234r");
+            RegisterClient("nicedic12344k", "pudgeis1234favor");
+            RegisterClient("1235nicedick", "pudgeis1616favor");
+        }
+        System.out.println(LoginClient("h", "2"));
+        System.out.println(LoginClient("nicedick", "2"));
+        System.out.println(LoginClient("nicedick", "pudgeisfavor"));
+>>>>>>> cd2223fcc3dd8c19a843df6afb329527f66769f1
     }
 
 
