@@ -14,8 +14,10 @@ import org.apache.poi.ss.usermodel.*;
 public class Server {
     private ServerSocket server;
     private final int SERVER_PORT = 10001;
+    private File data;
 
     public Server() throws IOException {
+        data = new File("data.xls");
         server = new ServerSocket(SERVER_PORT);
         while (true) {
             Socket client = server.accept();
@@ -27,19 +29,27 @@ public class Server {
         }
     }
 
-    public boolean RegisterClient (String login, String password) {
+    private Workbook getWorkBookWithAccounts() {
         try {
-            File data = new File("data.xls");
             HSSFWorkbook wb;
             if (!data.exists()) {
                 data.createNewFile();
                 wb = new HSSFWorkbook();
                 wb.createSheet();
-            }
-            else {
+            } else {
                 POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(data));
                 wb = new HSSFWorkbook(fs);
             }
+            return wb;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public boolean RegisterClient (String login, String password) {
+        try {
+            HSSFWorkbook wb = (HSSFWorkbook) getWorkBookWithAccounts();
             HSSFSheet sheet = wb.getSheetAt(0);
             Iterator rowIt = sheet.rowIterator();
             int cnt = 0;
@@ -55,10 +65,13 @@ public class Server {
             HSSFRow row = sheet.getRow(cnt);
             row.createCell(0);
             row.createCell(1);
+            row.createCell(2);
             Cell c = row.getCell(0);
             c.setCellValue(login);
             c = row.getCell(1);
             c.setCellValue(password);
+            c = row.getCell(2);
+            c.setCellValue("offline");
             wb.write(data);
         }
         catch(IOException e) {
@@ -66,25 +79,18 @@ public class Server {
         }
         return true;
     }
-
     public boolean LoginClient (String login, String password) {
         try {
-            File data = new File("data.xls");
-            HSSFWorkbook wb;
-            if (!data.exists()) {
-                wb = new HSSFWorkbook();
-                wb.createSheet();
-            } else {
-                POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(data));
-                wb = new HSSFWorkbook(fs);
-            }
+           HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
             HSSFSheet sheet = wb.getSheetAt(0);
             Iterator rowIt = sheet.rowIterator();
             while (rowIt.hasNext()) {
                 HSSFRow row = (HSSFRow) rowIt.next();
                 Iterator cellIt = row.cellIterator();
                 if (login.equals(cellIt.next().toString()) && password.equals(cellIt.next().toString())) {
-                    wb.close();
+                    Cell c = row.getCell(2);
+                    c.setCellValue("online");
+                    wb.write(data);
                     return true;
                 }
             }
@@ -94,8 +100,30 @@ public class Server {
         }
         return false;
     }
+    public void Logout (String login) {
+        try {
+            HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
+            HSSFSheet sheet = wb.getSheetAt(0);
+            Iterator rowIt = sheet.rowIterator();
+            while (rowIt.hasNext()) {
+                HSSFRow row = (HSSFRow) rowIt.next();
+                if (login.equals(row.getCell(0).toString())) {
+                    Cell c = row.getCell(2);
+                    c.setCellValue("offline");
+                    wb.write(data);
+                    return;
+                }
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void ClientSession(Socket client) {
+        System.out.println(RegisterClient("asdf", "asdf234"));
+        System.out.println(LoginClient("sdf", "asdfsd"));
+        System.out.println(LoginClient("asdf", "asdf234"));
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             String line = reader.readLine();
@@ -117,10 +145,5 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-
-
-
-
 }
