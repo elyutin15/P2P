@@ -4,6 +4,7 @@ import java.net.Socket;
 import java.sql.SQLOutput;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -19,11 +20,10 @@ public class Server {
         while (true) {
             Socket client = server.accept();
             System.out.println("---\nSuccess connection\n---");
-            ClientSession(client);
-            /*Thread sessionThread = new Thread(() -> {
+            Thread sessionThread = new Thread(() -> {
                 ClientSession(client);
             });
-            sessionThread.start();*/
+            sessionThread.start();
         }
     }
 
@@ -47,7 +47,6 @@ public class Server {
                 HSSFRow row = (HSSFRow) rowIt.next();
                 Iterator cellIt = row.cellIterator();
                 if (login.equals(cellIt.next().toString())) {
-                    wb.close();
                     return false;
                 }
                 cnt++;
@@ -61,9 +60,8 @@ public class Server {
             c = row.getCell(1);
             c.setCellValue(password);
             wb.write(data);
-            wb.close();
         }
-        catch(Exception e) {
+        catch(IOException e) {
             e.printStackTrace();
         }
         return true;
@@ -74,7 +72,6 @@ public class Server {
             File data = new File("data.xls");
             HSSFWorkbook wb;
             if (!data.exists()) {
-                data.createNewFile();
                 wb = new HSSFWorkbook();
                 wb.createSheet();
             } else {
@@ -97,14 +94,29 @@ public class Server {
         }
         return false;
     }
+
     public void ClientSession(Socket client) {
-        RegisterClient("nicedick", "pudgeisfavor");
-        RegisterClient("nice62636132dick", "pudgeisfavo1234r");
-        RegisterClient("nicedic12344k", "pudgeis1234favor");
-        RegisterClient("1235nicedick", "pudgeis1616favor");
-        System.out.println(LoginClient("h", "2"));
-        System.out.println(LoginClient("nicedick", "2"));
-        System.out.println(LoginClient("nicedick", "pudgeisfavor"));
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            String line = reader.readLine();
+            if (line == null)
+                return;
+            int firstIndexWhitespace = line.indexOf(' ', 11);
+            String command = line.substring(11, firstIndexWhitespace);
+            if (command.equals("register") || command.equals("login")) {
+                // "command := register login := lonsfd password := sdlfkjsdf
+                int secondIndexWhitespace = line.indexOf(' ', firstIndexWhitespace + 10);
+                String login = line.substring(firstIndexWhitespace + 10, secondIndexWhitespace);
+                String password = line.substring(secondIndexWhitespace + 13);
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+                writer.write(String.valueOf(command.equals("register") ? RegisterClient(login, password) : LoginClient(login, password)));
+                writer.newLine();
+                writer.flush();
+            }
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
