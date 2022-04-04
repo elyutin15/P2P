@@ -18,7 +18,7 @@ public class Registration {
     private static double yOffset = 0;
 
     public Registration(Stage stage) throws Exception {
-        AnchorPane anchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("registration.fxml")));
+        AnchorPane anchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("registration_scene.fxml")));
         Scene scene = new Scene(anchorPane, 400, 300);
         stage.setScene(scene);
         stage.show();

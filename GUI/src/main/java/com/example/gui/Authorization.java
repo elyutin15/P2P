@@ -34,9 +34,10 @@ public class Authorization extends Application {
     private static double xOffset = 0;
     private static double yOffset = 0;
     public static Stage _stage;
+
     @Override
     public void start(Stage stage) throws Exception {
-        AnchorPane anchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("authorization.fxml")));
+        AnchorPane anchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("authorization_scene.fxml")));
         anchorPane.setOnMousePressed(event -> {
             xOffset = stage.getX() - event.getScreenX();
             yOffset = stage.getY() - event.getScreenY();
@@ -45,9 +46,10 @@ public class Authorization extends Application {
             stage.setX(event.getScreenX() + xOffset);
             stage.setY(event.getScreenY() + yOffset);
         });
-        Scene scene = new Scene(anchorPane,400,300);
+        Scene scene = new Scene(anchorPane, 400, 300);
         stage.setScene(scene);
-        stage.initStyle(StageStyle.UNDECORATED);
+        if (!stage.getStyle().equals(StageStyle.UNDECORATED))
+            stage.initStyle(StageStyle.UNDECORATED);
         _stage = stage;
         stage.show();
     }
