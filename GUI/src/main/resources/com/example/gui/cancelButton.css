@@ -1,0 +1,22 @@
+#cancelButton {
+    -fx-text-fill: "#ffffff";
+    -fx-background-color: "#3a3f48";
+}
+#enterButton {
+    -fx-text-fill: "#ffffff";
+    -fx-background-color: "#3a3f48";
+}
+#RgButton {
+    -fx-text-fill: "#ffffff";
+    -fx-background-color: "#3a3f48";
+}
+#logField {
+    -fx-background-color: "#262a30";
+    -fx-border-color: "#7c8593";
+    -fx-text-fill: "#c1c8d5";
+}
+#passwordField {
+    -fx-background-color: "#262a30";
+    -fx-border-color: "#7c8593";
+    -fx-text-fill: "#c1c8d5";
+}
