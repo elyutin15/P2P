@@ -42,7 +42,7 @@ public class AuthorizationController {
 
     @FXML
     protected void minimizeWindowController() {
-        Authorization._stage.setIconified(true);
+        GlovalValues._stage.setIconified(true);
     }
 
     @FXML
@@ -56,19 +56,18 @@ public class AuthorizationController {
                         "password := " + password
         );
         if(client.getResponse().equals("true")) {
-        MainMenu mainMenu = new MainMenu(Authorization._stage);
+        GlovalValues._login = loginField.getText();
+        MainMenu mainMenu = new MainMenu(GlovalValues._stage);
         }
         client.close();
     }
     @FXML
     protected void RgButton() throws Exception {
-        Registration registration = new Registration(Authorization._stage);
+        Registration registration = new Registration(GlovalValues._stage);
     }
 
     @FXML
     protected void exitButtonController() {
-        Platform.exit();
-        System.exit(0);
+        GlovalValues._stage.close();
     }
-
 }
