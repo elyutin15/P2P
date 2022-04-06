@@ -73,6 +73,7 @@ public class Server {
             c = row.getCell(2);
             c.setCellValue("offline");
             wb.write(data);
+            System.out.println("huy");
         }
         catch(IOException e) {
             e.printStackTrace();
@@ -80,6 +81,7 @@ public class Server {
         return true;
     }
     public boolean LoginClient (String login, String password) {
+        System.out.println(login + ' ' + password);
         try {
            HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
             HSSFSheet sheet = wb.getSheetAt(0);
@@ -121,9 +123,9 @@ public class Server {
     }
 
     public void ClientSession(Socket client) {
-        System.out.println(RegisterClient("asdf", "asdf234"));
-        System.out.println(LoginClient("sdf", "asdfsd"));
-        System.out.println(LoginClient("asdf", "asdf234"));
+//        System.out.println(RegisterClient("asdf", "asdf234"));
+//        System.out.println(LoginClient("sdf", "asdfsd"));
+//        System.out.println(LoginClient("asdf", "asdf234"));
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             String line = reader.readLine();

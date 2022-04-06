@@ -1,5 +1,6 @@
 package com.example.gui;
 
+import Client.Client;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -48,16 +49,20 @@ public class AuthorizationController {
     protected void enterButtonController() throws Exception {
         String login = loginField.getText();
         String password = passwordField.getText();
-//        Client client = new Client();
-//        client.sendMessage(
-//                "command := login " +
-//                        "login := " + login + ' ' +
-//                        "password := " + password
-//        );
-//        if(client.getResponse().equals("true")) {
+        Client client = new Client();
+        client.sendMessage(
+                "command := login " +
+                        "login := " + login + ' ' +
+                        "password := " + password
+        );
+        if(client.getResponse().equals("true")) {
+        MainMenu mainMenu = new MainMenu(Authorization._stage);
+        }
+        client.close();
+    }
+    @FXML
+    protected void RgButton() throws Exception {
         Registration registration = new Registration(Authorization._stage);
-//        }
-//        client.close();
     }
 
     @FXML

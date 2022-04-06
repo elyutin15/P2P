@@ -20,3 +20,8 @@
     -fx-border-color: "#7c8593";
     -fx-text-fill: "#c1c8d5";
 }
+#secondPasswordField {
+    -fx-background-color: "#262a30";
+    -fx-border-color: "#7c8593";
+    -fx-text-fill: "#c1c8d5";
+}
