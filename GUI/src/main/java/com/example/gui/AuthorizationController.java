@@ -4,7 +4,6 @@ import Client.Client;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
@@ -57,12 +56,12 @@ public class AuthorizationController {
         );
         if(client.getResponse().equals("true")) {
         GlovalValues._login = loginField.getText();
-        MainMenu mainMenu = new MainMenu(GlovalValues._stage);
+        Main mainMenu = new Main(GlovalValues._stage);
         }
         client.close();
     }
     @FXML
-    protected void RgButton() throws Exception {
+    protected void RgButtonController() throws Exception {
         Registration registration = new Registration(GlovalValues._stage);
     }
 
