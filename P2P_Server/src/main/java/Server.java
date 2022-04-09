@@ -143,9 +143,7 @@ public class Server {
     }
 
     public void ClientSession(Socket client) {
-        registerClient("lol", "kek");
-        loginClient("lol", "kek", "192.168.1.1");
-        /*try {
+        try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             String line = reader.readLine();
             if (line == null)
@@ -194,6 +192,6 @@ public class Server {
             client.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 }
