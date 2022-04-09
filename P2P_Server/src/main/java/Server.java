@@ -57,8 +57,8 @@ public class Server {
             int cnt = 0;
             while (rowIt.hasNext()) {
                 HSSFRow row = (HSSFRow) rowIt.next();
-                Iterator cellIt = row.cellIterator();
-                if (login.equals(cellIt.next().toString())) {
+                Cell cell = row.getCell(1);
+                if (login.equals(cell.toString())) {
                     return false;
                 }
                 cnt++;
@@ -68,11 +68,14 @@ public class Server {
             row.createCell(0);
             row.createCell(1);
             row.createCell(2);
+            row.createCell(3);
             Cell c = row.getCell(0);
-            c.setCellValue(login);
+            c.setCellValue("-");
             c = row.getCell(1);
-            c.setCellValue(password);
+            c.setCellValue(login);
             c = row.getCell(2);
+            c.setCellValue(password);
+            c = row.getCell(3);
             c.setCellValue("offline");
             wb.write(data);
         }
@@ -81,7 +84,7 @@ public class Server {
         }
         return true;
     }
-    public boolean loginClient (String login, String password) {
+    public boolean loginClient (String login, String password, String ip) {
         System.out.println(login + ' ' + password);
         try {
            HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
@@ -89,10 +92,13 @@ public class Server {
             Iterator rowIt = sheet.rowIterator();
             while (rowIt.hasNext()) {
                 HSSFRow row = (HSSFRow) rowIt.next();
-                Iterator cellIt = row.cellIterator();
-                if (login.equals(cellIt.next().toString()) && password.equals(cellIt.next().toString())) {
-                    Cell c = row.getCell(2);
+                Cell cellLogin = row.getCell(1);
+                Cell cellPassword = row.getCell(2);
+                if (login.equals(cellLogin.toString()) && password.equals(cellPassword.toString())) {
+                    Cell c = row.getCell(3);
                     c.setCellValue("online");
+                    c = row.getCell(0);
+                    c.setCellValue(ip);
                     wb.write(data);
                     return true;
                 }
@@ -111,7 +117,7 @@ public class Server {
             while (rowIt.hasNext()) {
                 HSSFRow row = (HSSFRow) rowIt.next();
                 if (login.equals(row.getCell(0).toString())) {
-                    Cell c = row.getCell(2);
+                    Cell c = row.getCell(3);
                     c.setCellValue("offline");
                     wb.write(data);
                     return;
@@ -129,15 +135,17 @@ public class Server {
         Iterator rowIt = sheet.rowIterator();
         while (rowIt.hasNext()) {
             HSSFRow row = (HSSFRow) rowIt.next();
-            if ("online".equals(row.getCell(2).toString())) {
-                list.add(row.getCell(0).toString());
+            if ("online".equals(row.getCell(3).toString())) {
+                list.add(row.getCell(1).toString());
             }
         }
         return list;
     }
 
     public void ClientSession(Socket client) {
-        try {
+        registerClient("lol", "kek");
+        loginClient("lol", "kek", "192.168.1.1");
+        /*try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             String line = reader.readLine();
             if (line == null)
@@ -186,6 +194,6 @@ public class Server {
             client.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }
