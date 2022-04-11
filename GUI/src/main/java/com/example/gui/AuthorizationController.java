@@ -4,7 +4,6 @@ import Client.Client;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
@@ -42,7 +41,7 @@ public class AuthorizationController {
 
     @FXML
     protected void minimizeWindowController() {
-        Authorization._stage.setIconified(true);
+        GlovalValues._stage.setIconified(true);
     }
 
     @FXML
@@ -56,19 +55,18 @@ public class AuthorizationController {
                         "password := " + password
         );
         if(client.getResponse().equals("true")) {
-        MainMenu mainMenu = new MainMenu(Authorization._stage);
+        GlovalValues._login = loginField.getText();
+        Main mainMenu = new Main(GlovalValues._stage);
         }
         client.close();
     }
     @FXML
-    protected void RgButton() throws Exception {
-        Registration registration = new Registration(Authorization._stage);
+    protected void RgButtonController() throws Exception {
+        Registration registration = new Registration(GlovalValues._stage);
     }
 
     @FXML
     protected void exitButtonController() {
-        Platform.exit();
-        System.exit(0);
+        GlovalValues._stage.close();
     }
-
 }

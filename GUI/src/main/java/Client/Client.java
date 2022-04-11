@@ -23,6 +23,10 @@ public class Client {
         bufferedWriter.flush();
     }
 
+    public Socket getClientSocket() {
+        return clientSocket;
+    }
+
     public String getResponse() throws IOException {
         return bufferedReader.readLine();
     }

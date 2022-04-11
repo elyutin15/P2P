@@ -46,7 +46,7 @@ public class RegistrationController {
             );
             if(client.getResponse().equals("true")) {
                 Authorization authorization = new Authorization();
-                authorization.start(Authorization._stage);
+                authorization.start(GlovalValues._stage);
             }
         }
     }
@@ -54,18 +54,16 @@ public class RegistrationController {
     @FXML
     protected void cancelButtonController() throws Exception {
         Authorization authorization = new Authorization();
-        authorization.start(Authorization._stage);
+        authorization.start(GlovalValues._stage);
     }
 
     @FXML
     public void exitButtonController(ActionEvent actionEvent) {
-        Platform.exit();
-        System.exit(0);
+        GlovalValues._stage.close();
     }
 
     @FXML
-    public void minimizeWindowController(ActionEvent actionEvent) {
-        Authorization._stage.setIconified(true);
+    public void minimizeWindowController(ActionEvent actionEvent){GlovalValues._stage.setIconified(true);
     }
 
 }
