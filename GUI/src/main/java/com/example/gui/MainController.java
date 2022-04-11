@@ -1,12 +1,14 @@
 package com.example.gui;
 
+import Client.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+
+import java.io.IOException;
+import java.net.InetAddress;
 
 public class MainController {
 
@@ -35,9 +37,16 @@ public class MainController {
     public TextField copyKeyField;
 
     @FXML
-    public void createKeyButtonController(ActionEvent actionEvent) {
+    public void createKeyButtonController(ActionEvent actionEvent) throws IOException {
+        Client client = new Client();
         RandomKeyGenerator randomKeyGenerator = new RandomKeyGenerator();
         randomKeyGenerator.createKey();
+        client.sendMessage(
+                "command := createKey " +
+                "key := " + randomKeyGenerator.getKey() + ' ' +
+                "ip := " + InetAddress.getLocalHost().getHostAddress()
+        );
+        client.close();
         copyKeyField.setText(randomKeyGenerator.getKey());
     }
 

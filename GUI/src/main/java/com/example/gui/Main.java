@@ -1,6 +1,5 @@
 package com.example.gui;
 
-import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -9,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
 
 import java.util.Objects;
 
@@ -38,5 +38,7 @@ public class Main
                 stage.setY(event.getScreenY() + yOffset);
             }
         });
+
+//        PermanentServerListener permanentServerListener = new PermanentServerListener();
     }
 }

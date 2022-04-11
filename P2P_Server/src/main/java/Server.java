@@ -43,13 +43,13 @@ public class Server {
                 wb = new HSSFWorkbook(fs);
             }
             return wb;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
-    public boolean registerClient (String login, String password) {
+
+    public boolean registerClient(String login, String password) {
         try {
             HSSFWorkbook wb = (HSSFWorkbook) getWorkBookWithAccounts();
             HSSFSheet sheet = wb.getSheetAt(0);
@@ -75,16 +75,16 @@ public class Server {
             c = row.getCell(2);
             c.setCellValue("offline");
             wb.write(data);
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return true;
     }
-    public boolean loginClient (String login, String password) {
+
+    public boolean loginClient(String login, String password) {
         System.out.println(login + ' ' + password);
         try {
-           HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
+            HSSFWorkbook wb = (HSSFWorkbook) getWorkBookWithAccounts();
             HSSFSheet sheet = wb.getSheetAt(0);
             Iterator rowIt = sheet.rowIterator();
             while (rowIt.hasNext()) {
@@ -97,15 +97,15 @@ public class Server {
                     return true;
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
-    public void logout (String login) {
+
+    public void logout(String login) {
         try {
-            HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
+            HSSFWorkbook wb = (HSSFWorkbook) getWorkBookWithAccounts();
             HSSFSheet sheet = wb.getSheetAt(0);
             Iterator rowIt = sheet.rowIterator();
             while (rowIt.hasNext()) {
@@ -117,14 +117,14 @@ public class Server {
                     return;
                 }
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public ArrayList<String> getOnlineList () {
+
+    public ArrayList<String> getOnlineList() {
         ArrayList<String> list = new ArrayList<>();
-        HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
+        HSSFWorkbook wb = (HSSFWorkbook) getWorkBookWithAccounts();
         HSSFSheet sheet = wb.getSheetAt(0);
         Iterator rowIt = sheet.rowIterator();
         while (rowIt.hasNext()) {
@@ -182,6 +182,14 @@ public class Server {
                 login = line.substring(firstIndexWhitespace + 10, secondIndexWhitespace);
                 System.out.println("logout " + login);
                 logout(login);
+            }
+            if (command.equals("createKey")) {
+                int secondIndexWhitespace = line.indexOf(' ', firstIndexWhitespace + 10);
+                if (secondIndexWhitespace == -1)
+                    secondIndexWhitespace = line.length();
+                String key = line.substring(firstIndexWhitespace + 8, secondIndexWhitespace);
+                String ip = line.substring(secondIndexWhitespace+7);
+                System.out.println(key + "\n" + ip);
             }
             client.close();
         } catch (IOException e) {
