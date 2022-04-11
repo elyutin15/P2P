@@ -69,6 +69,7 @@ public class Server {
             row.createCell(1);
             row.createCell(2);
             row.createCell(3);
+            row.createCell(4);
             Cell c = row.getCell(0);
             c.setCellValue("-");
             c = row.getCell(1);
@@ -77,6 +78,8 @@ public class Server {
             c.setCellValue(password);
             c = row.getCell(3);
             c.setCellValue("offline");
+            c = row.getCell(4);
+            c.setCellValue("-");
             wb.write(data);
         }
         catch(IOException e) {
@@ -86,46 +89,46 @@ public class Server {
     }
     public boolean loginClient (String login, String password, String ip) {
         System.out.println(login + ' ' + password);
-        try {
-           HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
-            HSSFSheet sheet = wb.getSheetAt(0);
-            Iterator rowIt = sheet.rowIterator();
-            while (rowIt.hasNext()) {
-                HSSFRow row = (HSSFRow) rowIt.next();
-                Cell cellLogin = row.getCell(1);
-                Cell cellPassword = row.getCell(2);
-                if (login.equals(cellLogin.toString()) && password.equals(cellPassword.toString())) {
-                    Cell c = row.getCell(3);
-                    c.setCellValue("online");
-                    c = row.getCell(0);
-                    c.setCellValue(ip);
+
+        HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
+        HSSFSheet sheet = wb.getSheetAt(0);
+        Iterator rowIt = sheet.rowIterator();
+        while (rowIt.hasNext()) {
+            HSSFRow row = (HSSFRow) rowIt.next();
+            Cell cellLogin = row.getCell(1);
+            Cell cellPassword = row.getCell(2);
+            if (login.equals(cellLogin.toString()) && password.equals(cellPassword.toString())) {
+                Cell c = row.getCell(3);
+                c.setCellValue("online");
+                c = row.getCell(0);
+                c.setCellValue(ip);
+                try {
                     wb.write(data);
-                    return true;
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+                return true;
             }
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+
         return false;
     }
     public void logout (String login) {
-        try {
-            HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
-            HSSFSheet sheet = wb.getSheetAt(0);
-            Iterator rowIt = sheet.rowIterator();
-            while (rowIt.hasNext()) {
-                HSSFRow row = (HSSFRow) rowIt.next();
-                if (login.equals(row.getCell(0).toString())) {
-                    Cell c = row.getCell(3);
-                    c.setCellValue("offline");
+        HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
+        HSSFSheet sheet = wb.getSheetAt(0);
+        Iterator rowIt = sheet.rowIterator();
+        while (rowIt.hasNext()) {
+            HSSFRow row = (HSSFRow) rowIt.next();
+            if (login.equals(row.getCell(1).toString())) {
+                Cell c = row.getCell(3);
+                c.setCellValue("offline");
+                try {
                     wb.write(data);
-                    return;
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+                return;
             }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
         }
     }
     public ArrayList<String> getOnlineList () {
@@ -140,6 +143,25 @@ public class Server {
             }
         }
         return list;
+    }
+
+    public void writeKeyClient(String login, String key) {
+        HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
+        HSSFSheet sheet = wb.getSheetAt(0);
+        Iterator rowIt = sheet.rowIterator();
+        while (rowIt.hasNext()) {
+            HSSFRow row = (HSSFRow) rowIt.next();
+            if (login.equals(row.getCell(1).toString())) {
+                Cell c = row.getCell(4);
+                c.setCellValue(key);
+                try {
+                    wb.write(data);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+        }
     }
 
     public void ClientSession(Socket client) {
@@ -158,12 +180,10 @@ public class Server {
             if (command.equals("register") || command.equals("login")) {
                 // "command := register login := lonsfd password := sdlfkjsdf"
                 int secondIndexWhitespace = line.indexOf(' ', firstIndexWhitespace + 10);
-                if (secondIndexWhitespace == -1)
-                    secondIndexWhitespace = line.length();
                 login = line.substring(firstIndexWhitespace + 10, secondIndexWhitespace);
                 String password = line.substring(secondIndexWhitespace + 13);
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-                writer.write(String.valueOf(command.equals("register") ? registerClient(login, password) : loginClient(login, password)));
+                writer.write(String.valueOf(command.equals("register") ? registerClient(login, password) : loginClient(login, password, String.valueOf(client.getInetAddress().getHostAddress()))));
                 writer.newLine();
                 writer.flush();
             }
@@ -183,11 +203,22 @@ public class Server {
             if (command.equals("logout")) {
                 // "command := logout login := lonsfd"
                 int secondIndexWhitespace = line.indexOf(' ', firstIndexWhitespace + 10);
-                if (secondIndexWhitespace == -1)
-                    secondIndexWhitespace = line.length();
                 login = line.substring(firstIndexWhitespace + 10, secondIndexWhitespace);
                 System.out.println("logout " + login);
                 logout(login);
+            }
+            if (command.equals("createKey")) {
+                // "command := createKey key := abab login := aasdflaskdjf"
+                int secondIndexWhitespace = line.indexOf(' ', firstIndexWhitespace + 8);
+                String key = line.substring(firstIndexWhitespace + 8, secondIndexWhitespace);
+                login = line.substring(secondIndexWhitespace + 10);
+                writeKeyClient(login, key);
+            }
+            if (command.equals("pasteKey")) {
+                // "command := catchKey key := ababa"
+                int secondIndexWhitespace = line.indexOf(' ', firstIndexWhitespace + 10);
+                String key = line.substring(firstIndexWhitespace + 8);
+                key = key;
             }
             client.close();
         } catch (IOException e) {
