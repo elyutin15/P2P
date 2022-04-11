@@ -163,7 +163,17 @@ public class Server {
             }
         }
     }
-
+    public String findIpByKey (String key) {
+        HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
+        HSSFSheet sheet = wb.getSheetAt(0);
+        Iterator rowIt = sheet.rowIterator();
+        while (rowIt.hasNext()) {
+            HSSFRow row = (HSSFRow) rowIt.next();
+            if (key.equals(row.getCell(4).toString())) {
+                return row.getCell(0).toString();
+            }
+        }
+    }
     public void ClientSession(Socket client) {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -215,10 +225,14 @@ public class Server {
                 writeKeyClient(login, key);
             }
             if (command.equals("pasteKey")) {
-                // "command := catchKey key := ababa"
+                // "command := pasteKey key := ababa"
                 int secondIndexWhitespace = line.indexOf(' ', firstIndexWhitespace + 10);
                 String key = line.substring(firstIndexWhitespace + 8);
-                key = key;
+                String ip = findIpByKey(key);
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+                writer.write(ip);
+                writer.newLine();
+                writer.flush();
             }
             client.close();
         } catch (IOException e) {
