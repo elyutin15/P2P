@@ -8,7 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
 import java.io.IOException;
-import java.net.InetAddress;
 
 public class MainController {
 
@@ -17,6 +16,8 @@ public class MainController {
 
     @FXML
     public Button minimizeButton;
+    @FXML
+    public TextField pasteKeyField;
 
     @FXML
     public void initialize(){
@@ -44,14 +45,20 @@ public class MainController {
         client.sendMessage(
                 "command := createKey " +
                 "key := " + randomKeyGenerator.getKey() + ' ' +
-                "ip := " + InetAddress.getLocalHost().getHostAddress()
+                "login := " + GlovalValues._login
         );
         client.close();
         copyKeyField.setText(randomKeyGenerator.getKey());
     }
 
     @FXML
-    public void enterKeyButtonController(ActionEvent actionEvent) {
+    public void enterKeyButtonController(ActionEvent actionEvent) throws IOException {
+        Client client =new Client();
+        client.sendMessage("command := pasteKey " +
+                "key := " + pasteKeyField.getText()
+                );
+        client.getResponse();
+        client.close();
     }
 
     @FXML
