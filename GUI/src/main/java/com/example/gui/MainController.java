@@ -43,8 +43,7 @@ public class MainController {
         randomKeyGenerator.createKey();
         client.sendMessage(
                 "command := createKey " +
-                "key := " + randomKeyGenerator.getKey() + ' ' +
-                "ip := " + InetAddress.getLocalHost().getHostAddress()
+                "key := " + randomKeyGenerator.getKey()
         );
         client.close();
         copyKeyField.setText(randomKeyGenerator.getKey());
