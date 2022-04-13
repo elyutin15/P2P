@@ -1,4 +1,5 @@
 import java.io.*;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Array;
@@ -166,17 +167,18 @@ public class Server {
         }
     }
 
-//    public String findIpByKey(String key) {
-//        HSSFWorkbook wb = (HSSFWorkbook) getWorkBookWithAccounts();
-//        HSSFSheet sheet = wb.getSheetAt(0);
-//        Iterator rowIt = sheet.rowIterator();
-//        while (rowIt.hasNext()) {
-//            HSSFRow row = (HSSFRow) rowIt.next();
-//            if (key.equals(row.getCell(4).toString())) {
-//                return row.getCell(0).toString();
-//            }
-//        }
-//    }
+    public String findIpByKey(String key) {
+        HSSFWorkbook wb = (HSSFWorkbook) getWorkBookWithAccounts();
+        HSSFSheet sheet = wb.getSheetAt(0);
+        Iterator rowIt = sheet.rowIterator();
+        while (rowIt.hasNext()) {
+            HSSFRow row = (HSSFRow) rowIt.next();
+            if (key.equals(row.getCell(4).toString())) {
+                return row.getCell(0).toString();
+            }
+        }
+        return "";
+    }
 
     public void ClientSession(Socket client) {
         try {
@@ -228,16 +230,21 @@ public class Server {
                 login = line.substring(secondIndexWhitespace + 10);
                 writeKeyClient(login, key);
             }
-//            if (command.equals("pasteKey")) {
-//                // "command := pasteKey key := ababa"
-//                int secondIndexWhitespace = line.indexOf(' ', firstIndexWhitespace + 10);
-//                String key = line.substring(firstIndexWhitespace + 8);
-//                String ip = findIpByKey(key);
-//                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-//                writer.write(ip);
-//                writer.newLine();
-//                writer.flush();
-//            }
+            if (command.equals("pasteKey")) {
+                // "command := pasteKey key := ababa"
+                int secondIndexWhitespace = line.indexOf(' ', firstIndexWhitespace + 10);
+                String key = line.substring(firstIndexWhitespace + 8);
+                String ip = findIpByKey(key);
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+                writer.write(ip);
+                writer.newLine();
+                writer.flush();
+                Socket client2 = new Socket(InetAddress.getByName(ip), 10001);
+                writer = new BufferedWriter(new OutputStreamWriter(client2.getOutputStream()));
+                writer.write(client.getInetAddress().getHostAddress());
+                writer.newLine();
+                writer.flush();
+            }
             client.close();
         } catch (IOException e) {
             e.printStackTrace();
