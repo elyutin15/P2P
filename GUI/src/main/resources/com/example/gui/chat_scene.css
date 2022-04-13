@@ -1,0 +1,18 @@
+#mainBackground{
+    -fx-background-color : "#262a30";
+}
+#exitButton {
+    -fx-background-color: "#262a30";
+}
+#minimizeButton {
+    -fx-background-color: "#262a30";
+}
+#sendMessageButton {
+    -fx-background-color: "#262a30";
+    -fx-text-fill: WHITE;
+    -fx-border-color: "#7c8593";
+}
+#messageField {
+    -fx-border-color: "#7c8593";
+    -fx-background-color: "#262a30";
+}

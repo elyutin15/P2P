@@ -3,14 +3,14 @@ package Client;
 import java.io.*;
 import java.net.Socket;
 
-public class Client {
+public class ClientServer {
     private Socket clientSocket;
     private OutputStreamWriter outputStreamWriter;
     private BufferedWriter bufferedWriter;
     private InputStreamReader inputStreamReader;
     private BufferedReader bufferedReader;
-    public Client() throws IOException {
-        clientSocket = new Socket("26.246.20.243",10001);
+    public ClientServer() throws IOException {
+        clientSocket = new Socket("localhost",10001);
         outputStreamWriter= new OutputStreamWriter(clientSocket.getOutputStream());
         bufferedWriter = new BufferedWriter(outputStreamWriter);
         inputStreamReader = new InputStreamReader(clientSocket.getInputStream());

@@ -1,14 +1,15 @@
 package com.example.gui;
 
-import Client.Client;
-import javafx.application.Platform;
+import Client.ClientServer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 public class RegistrationController {
+    public static Stage _stage;
     public TextField loginField;
     public TextField passwordField;
     public TextField secondPasswordField;
@@ -38,15 +39,15 @@ public class RegistrationController {
         String password = passwordField.getText();
         String secondPassword = secondPasswordField.getText();
         if (password.equals(secondPassword)) {
-            Client client = new Client();
-            client.sendMessage(
+            ClientServer clientSocket = new ClientServer();
+            clientSocket.sendMessage(
                     "command := register " +
                             "login := " + login + ' ' +
                             "password := " + password
             );
-            if(client.getResponse().equals("true")) {
+            if(clientSocket.getResponse().equals("true")) {
                 Authorization authorization = new Authorization();
-                authorization.start(GlovalValues._stage);
+                authorization.start(_stage);
             }
         }
     }
@@ -54,16 +55,20 @@ public class RegistrationController {
     @FXML
     protected void cancelButtonController() throws Exception {
         Authorization authorization = new Authorization();
-        authorization.start(GlovalValues._stage);
+        authorization.start(_stage);
     }
 
     @FXML
     public void exitButtonController(ActionEvent actionEvent) {
-        GlovalValues._stage.close();
+        _stage.close();
     }
 
     @FXML
-    public void minimizeWindowController(ActionEvent actionEvent){GlovalValues._stage.setIconified(true);
+    public void minimizeWindowController(ActionEvent actionEvent){_stage.setIconified(true);
+    }
+
+    static public void setStage(Stage stage) {
+        _stage = stage;
     }
 
 }

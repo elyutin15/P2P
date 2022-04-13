@@ -3,19 +3,21 @@
     -fx-text-fill: "#ffffff";
     -fx-border-color: "#7c8593";
 }
-#copyKeyField{
-    -fx-background-color: "#262a30";
-    -fx-text-fill: "#ffffff";
-    -fx-alignment: CENTER;
-}
 #enterKeyButton {
     -fx-background-color: "#262a30";
     -fx-text-fill: "#ffffff";
     -fx-border-color: "#7c8593";
 }
+#copyKeyField{
+    -fx-background-color: "#262a30";
+    -fx-text-fill: "#ffffff";
+    -fx-border-color: "#7c8593";
+    -fx-alignment: CENTER;
+}
 #pasteKeyField{
     -fx-background-color: "#262a30";
     -fx-text-fill: "#ffffff";
+    -fx-border-color: "#7c8593";
     -fx-alignment: CENTER;
 }
 #exitButton {

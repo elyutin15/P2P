@@ -1,24 +1,20 @@
 package com.example.gui;
 
-import Client.ClientServer;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.util.Objects;
-
-public class Authorization extends Application {
+public class PrivateMessage extends Application {
 
     private static double xOffset = 0;
     private static double yOffset = 0;
 
     @Override
     public void start(Stage stage) throws Exception {
-        AnchorPane anchorPane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("authorization_scene.fxml")));
+        AnchorPane anchorPane = FXMLLoader.load((getClass().getResource("chat_scene.fxml")));
         anchorPane.setOnMousePressed(event -> {
             xOffset = stage.getX() - event.getScreenX();
             yOffset = stage.getY() - event.getScreenY();
@@ -31,26 +27,15 @@ public class Authorization extends Application {
         stage.setScene(scene);
         if (!stage.getStyle().equals(StageStyle.UNDECORATED))
             stage.initStyle(StageStyle.UNDECORATED);
-        AuthorizationController.setStage(stage);
         stage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
     @Override
     public void stop() throws Exception {
-        System.out.println("exit " + GlovalValues._login);
-        if(GlovalValues._login!=null) {
-            ClientServer client = new ClientServer();
-            client.sendMessage(
-                    "command := logout " +
-                            "login := " + GlovalValues._login
-            );
-        }
-        Platform.exit();
-        System.exit(0);
+        System.out.println("dialog closed");
+        GlovalValues.isDialogOpened = false;
+        PrivateMessageController.closeSocket(); //should not work
         super.stop();
     }
+
 }

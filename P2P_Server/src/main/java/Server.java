@@ -43,13 +43,13 @@ public class Server {
                 wb = new HSSFWorkbook(fs);
             }
             return wb;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
-    public boolean registerClient (String login, String password) {
+
+    public boolean registerClient(String login, String password) {
         try {
             HSSFWorkbook wb = (HSSFWorkbook) getWorkBookWithAccounts();
             HSSFSheet sheet = wb.getSheetAt(0);
@@ -81,16 +81,16 @@ public class Server {
             c = row.getCell(4);
             c.setCellValue("-");
             wb.write(data);
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return true;
     }
-    public boolean loginClient (String login, String password, String ip) {
+
+    public boolean loginClient(String login, String password, String ip) {
         System.out.println(login + ' ' + password);
 
-        HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
+        HSSFWorkbook wb = (HSSFWorkbook) getWorkBookWithAccounts();
         HSSFSheet sheet = wb.getSheetAt(0);
         Iterator rowIt = sheet.rowIterator();
         while (rowIt.hasNext()) {
@@ -113,8 +113,9 @@ public class Server {
 
         return false;
     }
-    public void logout (String login) {
-        HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
+
+    public void logout(String login) {
+        HSSFWorkbook wb = (HSSFWorkbook) getWorkBookWithAccounts();
         HSSFSheet sheet = wb.getSheetAt(0);
         Iterator rowIt = sheet.rowIterator();
         while (rowIt.hasNext()) {
@@ -131,9 +132,10 @@ public class Server {
             }
         }
     }
-    public ArrayList<String> getOnlineList () {
+
+    public ArrayList<String> getOnlineList() {
         ArrayList<String> list = new ArrayList<>();
-        HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
+        HSSFWorkbook wb = (HSSFWorkbook) getWorkBookWithAccounts();
         HSSFSheet sheet = wb.getSheetAt(0);
         Iterator rowIt = sheet.rowIterator();
         while (rowIt.hasNext()) {
@@ -146,7 +148,7 @@ public class Server {
     }
 
     public void writeKeyClient(String login, String key) {
-        HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
+        HSSFWorkbook wb = (HSSFWorkbook) getWorkBookWithAccounts();
         HSSFSheet sheet = wb.getSheetAt(0);
         Iterator rowIt = sheet.rowIterator();
         while (rowIt.hasNext()) {
@@ -163,17 +165,19 @@ public class Server {
             }
         }
     }
-    public String findIpByKey (String key) {
-        HSSFWorkbook wb = (HSSFWorkbook)getWorkBookWithAccounts();
-        HSSFSheet sheet = wb.getSheetAt(0);
-        Iterator rowIt = sheet.rowIterator();
-        while (rowIt.hasNext()) {
-            HSSFRow row = (HSSFRow) rowIt.next();
-            if (key.equals(row.getCell(4).toString())) {
-                return row.getCell(0).toString();
-            }
-        }
-    }
+
+//    public String findIpByKey(String key) {
+//        HSSFWorkbook wb = (HSSFWorkbook) getWorkBookWithAccounts();
+//        HSSFSheet sheet = wb.getSheetAt(0);
+//        Iterator rowIt = sheet.rowIterator();
+//        while (rowIt.hasNext()) {
+//            HSSFRow row = (HSSFRow) rowIt.next();
+//            if (key.equals(row.getCell(4).toString())) {
+//                return row.getCell(0).toString();
+//            }
+//        }
+//    }
+
     public void ClientSession(Socket client) {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -224,16 +228,16 @@ public class Server {
                 login = line.substring(secondIndexWhitespace + 10);
                 writeKeyClient(login, key);
             }
-            if (command.equals("pasteKey")) {
-                // "command := pasteKey key := ababa"
-                int secondIndexWhitespace = line.indexOf(' ', firstIndexWhitespace + 10);
-                String key = line.substring(firstIndexWhitespace + 8);
-                String ip = findIpByKey(key);
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-                writer.write(ip);
-                writer.newLine();
-                writer.flush();
-            }
+//            if (command.equals("pasteKey")) {
+//                // "command := pasteKey key := ababa"
+//                int secondIndexWhitespace = line.indexOf(' ', firstIndexWhitespace + 10);
+//                String key = line.substring(firstIndexWhitespace + 8);
+//                String ip = findIpByKey(key);
+//                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+//                writer.write(ip);
+//                writer.newLine();
+//                writer.flush();
+//            }
             client.close();
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,26 +1,30 @@
 package com.example.gui;
 
-import Client.Client;
+import Client.ClientServer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class MainController {
 
+    public static Stage _stage;
     @FXML
     public Button exitButton;
-
     @FXML
     public Button minimizeButton;
     @FXML
     public TextField pasteKeyField;
+    @FXML
+    public TextField copyKeyField;
+
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         ImageView exitView = new ImageView(getClass().getResource("/assets/exit.png").toExternalForm());
         exitView.setFitWidth(12);
         exitView.setFitHeight(12);
@@ -35,38 +39,49 @@ public class MainController {
     }
 
     @FXML
-    public TextField copyKeyField;
-
-    @FXML
     public void createKeyButtonController(ActionEvent actionEvent) throws IOException {
-        Client client = new Client();
+        ClientServer client = new ClientServer();
         RandomKeyGenerator randomKeyGenerator = new RandomKeyGenerator();
         randomKeyGenerator.createKey();
         client.sendMessage(
                 "command := createKey " +
-                "key := " + randomKeyGenerator.getKey() + ' ' +
-                "login := " + GlovalValues._login
+                        "key := " + randomKeyGenerator.getKey() + ' ' +
+                        "login := " + GlovalValues._login
         );
         client.close();
         copyKeyField.setText(randomKeyGenerator.getKey());
     }
 
     @FXML
-    public void enterKeyButtonController(ActionEvent actionEvent) throws IOException {
-        Client client =new Client();
-        client.sendMessage("command := pasteKey " +
+    public void enterKeyButtonController(ActionEvent actionEvent) throws Exception {
+        ClientServer clientSocket = new ClientServer();
+        clientSocket.sendMessage("command := pasteKey " +
                 "key := " + pasteKeyField.getText()
-                );
-        client.getResponse();
-        client.close();
+        );
+        String friendIp = clientSocket.getResponse();
+
+        if (!GlovalValues.isDialogOpened && friendIp != null) {
+            PrivateMessage privateMessages = new PrivateMessage();
+            Stage newStage = new Stage();
+            privateMessages.start(newStage);
+            PrivateMessageController.setStage(newStage);
+            PrivateMessageController.setFriendIp(friendIp);
+            GlovalValues.isDialogOpened = true;
+        }
+        clientSocket.close();
     }
 
     @FXML
     public void exitButtonController(ActionEvent actionEvent) {
-        GlovalValues._stage.close();
+        _stage.close();
     }
 
     @FXML
-    public void minimizeWindowController(ActionEvent actionEvent){GlovalValues._stage.setIconified(true);
+    public void minimizeWindowController(ActionEvent actionEvent) {
+        _stage.setIconified(true);
+    }
+
+    public static void setStage(Stage stage) {
+        _stage = stage;
     }
 }

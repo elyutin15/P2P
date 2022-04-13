@@ -1,14 +1,15 @@
 package com.example.gui;
 
-import Client.Client;
+import Client.ClientServer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 public class AuthorizationController {
-
+    private static Stage _stage;
     @FXML
     private Button exitButton;
     @FXML
@@ -19,7 +20,7 @@ public class AuthorizationController {
     private TextField passwordField;
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         ImageView exitView = new ImageView(getClass().getResource("/assets/exit.png").toExternalForm());
         exitView.setFitWidth(12);
         exitView.setFitHeight(12);
@@ -34,6 +35,24 @@ public class AuthorizationController {
     }
 
     @FXML
+    protected void enterButtonController() throws Exception {
+        String login = loginField.getText();
+        String password = passwordField.getText();
+        ClientServer clientSocket = new ClientServer();
+        clientSocket.sendMessage(
+                "command := login " +
+                        "login := " + login + ' ' +
+                        "password := " + password
+        );
+        if (clientSocket.getResponse().equals("true")) {
+            GlovalValues._login = loginField.getText();
+            Main mainMenu = new Main(_stage);
+            MainController.setStage(_stage);
+        }
+        clientSocket.close();
+    }
+
+    @FXML
     protected void cancelButtonController() {
         Platform.exit();
         System.exit(0);
@@ -41,32 +60,20 @@ public class AuthorizationController {
 
     @FXML
     protected void minimizeWindowController() {
-        GlovalValues._stage.setIconified(true);
+        _stage.setIconified(true);
     }
 
     @FXML
-    protected void enterButtonController() throws Exception {
-        String login = loginField.getText();
-        String password = passwordField.getText();
-        Client client = new Client();
-        client.sendMessage(
-                "command := login " +
-                        "login := " + login + ' ' +
-                        "password := " + password
-        );
-        if(client.getResponse().equals("true")) {
-        GlovalValues._login = loginField.getText();
-        Main mainMenu = new Main(GlovalValues._stage);
-        }
-        client.close();
-    }
-    @FXML
     protected void RgButtonController() throws Exception {
-        Registration registration = new Registration(GlovalValues._stage);
+        Registration registration = new Registration(_stage);
     }
 
     @FXML
     protected void exitButtonController() {
-        GlovalValues._stage.close();
+        _stage.close();
+    }
+
+    static public void setStage(Stage stage) {
+        _stage = stage;
     }
 }
